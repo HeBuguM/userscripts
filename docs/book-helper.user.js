@@ -9,6 +9,7 @@
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @downloadURL https://hebugum.github.io/userscripts/book-helper.user.js
+// @updateURL   https://hebugum.github.io/userscripts/book-helper.user.js
 // @connect     chitanka.info
 // @connect     185.138.176.146
 // ==/UserScript==
