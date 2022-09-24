@@ -4,7 +4,6 @@
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
 // @version     1.02
-// @noframes
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -12,6 +11,7 @@
 // @updateURL   https://hebugum.github.io/userscripts/book-helper.user.js
 // @connect     chitanka.info
 // @connect     185.138.176.146
+// @noframes
 // ==/UserScript==
 
 // ==Code==
