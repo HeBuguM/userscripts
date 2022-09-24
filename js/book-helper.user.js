@@ -3,12 +3,12 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.02
+// @version     1.03
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @downloadURL https://hebugum.github.io/userscripts/book-helper.user.js
-// @updateURL   https://hebugum.github.io/userscripts/book-helper.user.js
+// @downloadURL https://hebugum.github.io/userscripts/js/book-helper.user.js
+// @updateURL   https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @connect     chitanka.info
 // @connect     185.138.176.146
 // @noframes
@@ -203,7 +203,8 @@ function searchChitanka(title) {
         <div class="bookAuthorProfile__followerCount">'+ book.titleAuthor + '</div>\
         <div class="bookAuthorProfile__followerCount">Превод: '+ book.translators[0]?.name + '</div>\
         <div class="bookAuthorProfile__followerCount">\
-        <a href="https://chitanka.info/book/'+ book.id + '.epub" target="_blank"><img src="https://gobooks.com/images/epub-icon.svg" style="width: 25px"></a>\
+        <a href="https://chitanka.info/book/'+ book.id + '.epub" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/epub-file-type.png" style="width: 30px"></a>\
+        <a href="https://chitanka.info/book/'+ book.id + '.mobi" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/mobi-file-type.png" style="width: 30px"></a>\
     </div>\
 </div>';
                 $(".chitanka_results").append(div);
