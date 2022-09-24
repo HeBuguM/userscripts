@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.01
+// @version     1.02
 // @noframes
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
