@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.03
+// @version     1.04
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -81,13 +81,16 @@ $(document).ready(function () {
     /// Читанка Търсене
     if (path.match(/book\/(show|edit)\//)) {
         let title = $("h1#bookTitle").text().trim();
-        if (!title) {
+        if (!title && $("input#book_title").length) {
             title = $("input#book_title").val().split("(")[0].trim()
+        }
+        if (!title && $("h1[data-testid='bookTitle']").length) {
+            title =  $("h1[data-testid='bookTitle']").text().trim()
         }
 
         let div_chitanka = '<div class=" clearFloats bigBox">\
         <div class="h2Container gradientHeaderContainer">\
-           <h2 class="brownBackground"><a href="https://chitanka.info"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px;float: left;margin-right: 8px;"></a> Читанка\
+           <h2 class="brownBackground Text Text__title3"><a href="https://chitanka.info"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px;float: left;margin-right: 8px;"></a> Читанка\
                 <div class="changeSearchChitanka" data-title="'+ title + '" style="float: right;margin-right: 5px;margin-top: 2px; cursor: pointer"><img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg"></div>\
            </h2>\
         </div>\
@@ -95,12 +98,14 @@ $(document).ready(function () {
         <div class="bigBoxContent containerWithHeaderContent">\
         <div class="smallText chitanka_results"></div>\
         <div class="clear"></div></div></div><div class="bigBoxBottom"></div></div>';
+
         if ($('.recommendItBar').length) {
             $('.recommendItBar').after(div_chitanka);
         } else if ($(".rightContainer").length) {
             $("a:contains('Delete Photo')").next().next().after(div_chitanka)
+        } else if($(".BookPage__leftColumn")) {
+            $(".BookPage__leftColumn").find(".Sticky").append(div_chitanka);
         }
-
         searchChitanka(title);
     }
 
@@ -117,13 +122,16 @@ $(document).ready(function () {
 
     if (path.match(/book\/(show|edit)\//)) {
         let title = $("h1#bookTitle").text().trim();
-        if (!title) {
+        if (!title && $("input#book_title").length) {
             title = $("input#book_title").val().split("(")[0].trim()
+        }
+        if (!title && $("h1[data-testid='bookTitle']").length) {
+            title =  $("h1[data-testid='bookTitle']").text().trim()
         }
 
         let div_libruse = '<div class=" clearFloats bigBox">\
         <div class="h2Container gradientHeaderContainer">\
-           <h2 class="brownBackground"><a href="https://www.libruse.bg/opac/"><img src="https://www.libruse.bg/images/sign.svg" style="width: 25px;float: left;margin-right: 8px;"></a> Библиотека "Любен Каравелов" \
+           <h2 class="brownBackground Text Text__title3"><a href="https://www.libruse.bg/opac/"><img src="https://www.libruse.bg/images/sign.svg" style="width: 25px;float: left;margin-right: 8px;"></a> Библиотека \
                 <div class="changeSearchLibruse" data-title="'+ title + '" style="float: right;margin-right: 5px;margin-top: 2px; cursor: pointer"><img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg"></div>\
            </h2>\
         </div>\
@@ -131,12 +139,14 @@ $(document).ready(function () {
         <div class="bigBoxContent containerWithHeaderContent">\
         <div class="smallText libruse_results"></div>\
         <div class="clear"></div></div></div><div class="bigBoxBottom"></div></div>';
+
         if ($('.recommendItBar').length) {
             $('.recommendItBar').after(div_libruse);
         } else if ($(".rightContainer").length) {
             $("a:contains('Delete Photo')").next().next().after(div_libruse)
+        } else if($(".BookPage__leftColumn")) {
+            $(".BookPage__leftColumn").find(".Sticky").append(div_libruse);
         }
-
         searchLibruse(title);
     }
 
@@ -154,6 +164,9 @@ $(document).ready(function () {
     // The Story Graph Link
     if (path.match(/book\/show\//)) {
         let original_title = $("div.infoBoxRowTitle:contains('Original Title')").next().text();
+        if(!original_title) {
+            let original_title = $("div.DescListItem:contains('Original')").find("ul.CollapsableList").text();
+        }
         if (original_title) {
             let author = $("span[itemprop='author']").find(".authorName__container").first().find("span[itemprop='name']").text();
             if (author) {
@@ -162,8 +175,11 @@ $(document).ready(function () {
                        <img src="https://app.thestorygraph.com/icons/apple-icon-60x60.png" style="float: left;height: 26px;margin-top: -6px;">\
                        The StoryGraph</a>\
                 </div>';
-                $("div#imagecol").append(storygraph);
-                console.log(original_title, author);
+                if($("div#imagecol").length) {
+                    $("div#imagecol").append(storygraph);
+                } else if($(".BookPage__leftColumn")) {
+                    $(".BookPage__leftColumn").find(".Sticky").append(storygraph);
+                }
             }
         }
     }
@@ -193,16 +209,17 @@ function searchChitanka(title) {
             }
 
             // Книги
-            resp.result.books.each(function (book) {
+            $(resp.result.books).each(function (i,book) {
                 found_books.push(book.title + "|" + book.titleAuthor);
                 var div = '<div class="bookAuthorProfile__topContainer">\
-    <div class="bookAuthorProfile__photoContainer">\
-        <img src="https://chitanka.info/'+ book.cover + '" style="max-width: 65px; max-height: 85px"></div>\
-        <div class="bookAuthorProfile__widgetContainer" style="vertical-align: top; width: calc(100% - 85px)">\
+        <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
+            <img src="https://chitanka.info/'+ book.cover + '" style="width: 55px; height: 80px">\
+        </div>\
+        <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
         <div class="bookAuthorProfile__name" style="font-size: 14px;"><a href="https://chitanka.info/book/'+ book.id + '" target="_blank">' + book.title + '</a></div>\
-        <div class="bookAuthorProfile__followerCount">'+ book.titleAuthor + '</div>\
-        <div class="bookAuthorProfile__followerCount">Превод: '+ book.translators[0]?.name + '</div>\
-        <div class="bookAuthorProfile__followerCount">\
+        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">'+ book.titleAuthor + '</div>\
+        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">Превод: '+ book.translators[0]?.name + '</div>\
+        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">\
         <a href="https://chitanka.info/book/'+ book.id + '.epub" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/epub-file-type.png" style="width: 30px"></a>\
         <a href="https://chitanka.info/book/'+ book.id + '.mobi" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/mobi-file-type.png" style="width: 30px"></a>\
     </div>\
@@ -211,14 +228,14 @@ function searchChitanka(title) {
             });
 
             // Текстове
-            resp.result.texts.each(function (text) {
+            $(resp.result.texts).each(function (i,text) {
                 var div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
-    <div class="bookAuthorProfile__photoContainer" style="margin-right: 5px">\
+    <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
         <a href="https://chitanka.info/text/'+ text.id + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px"></a>\
     </div>\
-    <div class="bookAuthorProfile__widgetContainer" style="vertical-align: top; width: calc(100% - 85px)">\
+    <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
     <div class="bookAuthorProfile__name" style="font-size: 12px;">'+ text.title + '</div>\
-    <div class="bookAuthorProfile__followerCount" style="margin-top: 0px;">'+ text.authors[0]?.name + '</div>\
+    <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued" style="margin-top: 0px;">'+ text.authors[0]?.name + '</div>\
 </div>';
                 if (found_books.indexOf(text.title + "|" + text.authors[0]?.name) < 0) {
                     $(".chitanka_results").append(div);
@@ -273,13 +290,13 @@ function searchLibruse(title) {
                 });
 
                 var div = '<div class="bookAuthorProfile__topContainer">\
-    <div class="bookAuthorProfile__photoContainer">\
-        <img src="'+ libCover + '" style="max-width: 65px; max-height: 85px">\
+    <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
+        <img src="'+ libCover + '" style="width: 55px; height: 80px">\
     </div>\
-    <div class="bookAuthorProfile__widgetContainer" style="vertical-align: top; width: calc(100% - 85px)">\
+    <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
         <div class="bookAuthorProfile__name" style="font-size: 14px;"><a href="'+ libUrl + '" target="_blank">' + libTitle + '</a>\
     </div>\
-    <div class="bookAuthorProfile__followerCount">'+ $(doc).find("h5.author").text() + '</div>\
+    <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">'+ $(doc).find("h5.author").text() + '</div>\
     <ul>'+ holdings.join('') + '</ul>\
 </div>';
                 $(".libruse_results").append(div);
