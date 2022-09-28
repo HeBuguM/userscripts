@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.10
+// @version     1.11
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -106,14 +106,15 @@ $(document).ready(function () {
             $("a:contains('Delete Photo')").next().next().after(div_chitanka)
         } else if($(".BookPage__leftColumn")) {
             if(!$(".HeBuguM__Container").length)  {
-                let HeBuguM__Container = '<div class="HeBuguM__Container SocialSignalsSection">\
+                let HeBuguM__Container = '<hr class="Divider Divider--largeMargin" role="presentation">\
+                <div class="HeBuguM__Container SocialSignalsSection">\
                     <div class="SocialSignalsSection__container">\
                         <div class="ChitankaSection SocialSignalsSection__signal" style="align-items: start;"></div>\
                         <div class="LibruseSection SocialSignalsSection__signal" style="align-items: start;"></div>\
                     </div>\
                 </div>\
                 <hr class="Divider Divider--largeMargin" role="presentation">';
-                $(".SocialSignalsSection").before(HeBuguM__Container);
+                $(".FeaturedDetails").after(HeBuguM__Container);
                 $(".ChitankaSection").append(div_chitanka);
             }
         }
