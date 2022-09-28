@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.11
+// @version     1.12
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -16,9 +16,12 @@
 
 // ==Code==
 
-$(document).ready(function () {
+var spinner_icon = '<img src="https://hebugum.github.io/userscripts/assets/loading.gif" style="height: 19px">';
+var search_icon = '<img src="https://hebugum.github.io/userscripts/assets/search.png" style="height: 19px">';
 
-    var path = window.location.pathname;
+var path = window.location.pathname;
+
+$(document).ready(function () {
 
     //////
     // Goodread Challenge
@@ -211,16 +214,14 @@ $(document).ready(function () {
 });
 
 function searchChitanka(title) {
-    var spinner_html = '<div class="spinnerContainer"><div class="spinner"><div class="spinner__mask"><div class="spinner__maskedCircle"></div></div></div></div>';
-    var search_html = '<img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg">';
     var found_books = [];
-    $(".changeSearchChitanka").html(spinner_html);
+    $(".changeSearchChitanka").html(spinner_icon);
 
     GM_xmlhttpRequest({
         method: "GET",
         url: "https://chitanka.info/search.json?q=" + encodeURIComponent(title),
         onload: function (response) {
-            $(".changeSearchChitanka").attr("data-title", title).html(search_html);
+            $(".changeSearchChitanka").attr("data-title", title).html(search_icon);
             $(".chitanka_results").html("");
             var resp = JSON.parse(response.responseText);
             if (resp.result.nbResults == 0) {
@@ -265,10 +266,8 @@ function searchChitanka(title) {
 }
 
 function searchLibruse(title) {
-    var spinner_html = '<div class="spinnerContainer"><div class="spinner"><div class="spinner__mask"><div class="spinner__maskedCircle"></div></div></div></div>';
-    var search_html = '<img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg">';
     var found_books = [];
-    $(".changeSearchLibruse").html(spinner_html);
+    $(".changeSearchLibruse").html(spinner_icon);
     let domain = 'http://185.138.176.146:18082'
     let url = domain + "/cgi-bin/koha/opac-search.pl?q=" + encodeURIComponent(title) + "&limit=branch:BLK";
 
@@ -276,7 +275,7 @@ function searchLibruse(title) {
         method: "GET",
         url: url,
         onload: function (response) {
-            $(".changeSearchLibruse").attr("data-title", title).html(search_html);
+            $(".changeSearchLibruse").attr("data-title", title).html(search_icon);
             $(".libruse_results").html("");
 
             var doc = document.createElement('div');
