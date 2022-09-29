@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.12
+// @version     1.13
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -80,6 +80,14 @@ $(document).ready(function () {
     //////
     ///   Goodreads Book Page
     //////////
+
+    if (path.match(/book\/show\/(\d{1,})/)) {
+        let main_work = $("a.DiscussionCard[href*='/work/quotes/']").attr("href").match(/\/work\/quotes\/(\d{1,})/)
+        if(main_work) {
+            let book_page_editions = '<center id="HeBuguM_leftColumn" style="margin-bottom: 10px"><a href="https://www.goodreads.com/work/editions/'+main_work[1]+'?sort=title" class="Button Button--secondary Button--small"><span class="Button__labelItem">All Editions</span></a></center>';
+            $(".BookPage__leftColumn").find(".Sticky").append(book_page_editions);
+        }
+    }
 
     /// Читанка Търсене
     if (path.match(/book\/(show|edit)\//)) {
@@ -193,7 +201,7 @@ $(document).ready(function () {
             }
             if (author) {
                 let storygraph = '<div id ="storygraph" style="display: flex;justify-content: center;">\
-                   <a target="_blank" href="https://app.thestorygraph.com/browse?search_term='+ encodeURIComponent(original_title + ' ' + author) + '" style="font-size: 15px;color: black;text-decoration: none;">\
+                   <a target="_blank" class="Button Button--secondary Button--small" href="https://app.thestorygraph.com/browse?search_term='+ encodeURIComponent(original_title + ' ' + author) + '" style="font-size: 15px;color: black;text-decoration: none;">\
                        <img src="https://app.thestorygraph.com/icons/apple-icon-60x60.png" style="float: left;height: 26px;margin-top: -6px;">\
                        The StoryGraph</a>\
                 </div>';
