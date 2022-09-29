@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.13
+// @version     1.14
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -18,6 +18,7 @@
 
 var spinner_icon = '<img src="https://hebugum.github.io/userscripts/assets/loading.gif" style="height: 19px">';
 var search_icon = '<img src="https://hebugum.github.io/userscripts/assets/search.png" style="height: 19px">';
+var libruse_domain = 'http://185.138.176.146:18082'
 
 var path = window.location.pathname;
 
@@ -82,10 +83,13 @@ $(document).ready(function () {
     //////////
 
     if (path.match(/book\/show\/(\d{1,})/)) {
-        let main_work = $("a.DiscussionCard[href*='/work/quotes/']").attr("href").match(/\/work\/quotes\/(\d{1,})/)
-        if(main_work) {
-            let book_page_editions = '<center id="HeBuguM_leftColumn" style="margin-bottom: 10px"><a href="https://www.goodreads.com/work/editions/'+main_work[1]+'?sort=title" class="Button Button--secondary Button--small"><span class="Button__labelItem">All Editions</span></a></center>';
-            $(".BookPage__leftColumn").find(".Sticky").append(book_page_editions);
+        let quotes_link = $("a.DiscussionCard[href*='/work/quotes/']");
+        if(quotes_link.length) {
+            let main_work = quotes_link.attr("href").match(/\/work\/quotes\/(\d{1,})/);
+            if(main_work) {
+                let book_page_editions = '<center id="HeBuguM_leftColumn" style="margin-bottom: 10px"><a href="https://www.goodreads.com/work/editions/'+main_work[1]+'?sort=title" class="Button Button--secondary Button--small"><span class="Button__labelItem">All Editions</span></a></center>';
+                $(".BookPage__leftColumn").find(".Sticky").append(book_page_editions);
+            }
         }
     }
 
@@ -239,7 +243,7 @@ function searchChitanka(title) {
             // Книги
             $(resp.result.books).each(function (i,book) {
                 found_books.push(book.title + "|" + book.titleAuthor);
-                var div = '<div class="bookAuthorProfile__topContainer">\
+                let div = '<div class="bookAuthorProfile__topContainer">\
         <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
             <img src="https://chitanka.info/'+ book.cover + '" style="width: 55px; height: 80px">\
         </div>\
@@ -257,7 +261,7 @@ function searchChitanka(title) {
 
             // Текстове
             $(resp.result.texts).each(function (i,text) {
-                var div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
+                let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
     <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
         <a href="https://chitanka.info/text/'+ text.id + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px"></a>\
     </div>\
@@ -274,10 +278,9 @@ function searchChitanka(title) {
 }
 
 function searchLibruse(title) {
-    var found_books = [];
     $(".changeSearchLibruse").html(spinner_icon);
-    let domain = 'http://185.138.176.146:18082'
-    let url = domain + "/cgi-bin/koha/opac-search.pl?q=" + encodeURIComponent(title) + "&limit=branch:BLK";
+
+    let url = libruse_domain + "/cgi-bin/koha/opac-search.pl?q=" + encodeURIComponent(title) + "&limit=branch:BLK";
 
     GM_xmlhttpRequest({
         method: "GET",
@@ -298,7 +301,7 @@ function searchLibruse(title) {
                 let libTitle = $(doc).find("h1.title").text();
                 let libCover = '';
                 if ($(doc).find("a.localimage").find("img").attr("src")) {
-                    libCover = domain + $(doc).find("a.localimage").find("img").attr("src");
+                    libCover = libruse_domain + $(doc).find("a.localimage").find("img").attr("src");
                 }
 
                 let holdings = [];
@@ -315,7 +318,7 @@ function searchLibruse(title) {
                     holdings.push('<li class="Text Text__body3" style="color: ' + color + '">' + status + '</li>');
                 });
 
-                var div = '<div class="bookAuthorProfile__topContainer">\
+                let div = '<div class="bookAuthorProfile__topContainer">\
     <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
         <img src="'+ libCover + '" style="width: 55px; height: 80px">\
     </div>\
@@ -328,7 +331,28 @@ function searchLibruse(title) {
                 $(".libruse_results").append(div);
 
             } else if ($(doc).find("strong:contains('Вашето търсене върна')").length) {
-                $(".libruse_results").html("<a href='" + url + "' target='_blank'>" + $(doc).find("strong:contains('Вашето търсене върна')").text() + "</a>");
+                let results = $(doc).find(".searchresults").find("table.table-striped").find("tbody").find("tr");
+                console.log(results);
+                if(results.length) {
+                    $(results).each(function (i,result) {
+                        let res_title = $(result).find("a.title").text();
+                        let res_author = $(result).find("a.author").text();
+                        let res_link = $(result).find("a.title").attr("href");
+                        let access = $(result).find("span.label:contains('Достъпност ')").closest('span.results_summary').text();
+
+                        let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
+<div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
+<a href="'+ libruse_domain + res_link + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://www.libruse.bg/images/sign.svg" style="width: 25px"></a>\
+</div>\
+<div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
+<div class="bookAuthorProfile__name" style="font-weight: bold;">'+ res_title + '</div>\
+<div class="" style="margin-top: 0px;">'+res_author+'</div>\
+<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued" style="margin-top: 0px; margin-bottom: 10px;">'+access+'</div>\
+</div>';
+                        $(".libruse_results").append(div);
+                    });
+                }
+                $(".libruse_results").append("<div><a href='" + url + "' target='_blank'>" + $(doc).find("strong:contains('Вашето търсене върна')").text() + "</a></div>");
             } else {
                 $(".libruse_results").html("<a href='" + url + "' target='_blank'>Виж резултата от търсенето</a>");
             }
