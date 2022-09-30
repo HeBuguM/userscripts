@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.15
+// @version     1.16
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -338,16 +338,26 @@ function searchLibruse(title) {
                         let res_title = $(result).find("a.title").text();
                         let res_author = $(result).find("a.author").text();
                         let res_link = $(result).find("a.title").attr("href");
-                        let access = $(result).find("span.label:contains('Достъпност ')").closest('span.results_summary').text();
+                        let access = $(result).find("span.label:contains('Достъпност')").closest('span.results_summary').text();
+                        let access_color = 'gray';
+                        if(access) {
+                            access = access.replace('Достъпност','').replace('Няма свободни артикули:','Няма свободни артикули');
+                            if(access.indexOf('Няма свободни артикули') > -1) {
+                                access_color = 'red';
+                            }
+                            if(access.indexOf('Артикулите ги има') > -1) {
+                                access_color = 'green';
+                            }
+                        }
 
                         let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
 <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
 <a href="'+ libruse_domain + res_link + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://www.libruse.bg/images/sign.svg" style="width: 25px"></a>\
 </div>\
 <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
-<div class="bookAuthorProfile__name" style="font-weight: bold;">'+ res_title + '</div>\
-<div class="" style="margin-top: 0px;">'+res_author+'</div>\
-<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued" style="margin-top: 0px; margin-bottom: 10px;">'+access+'</div>\
+<div class="bookAuthorProfile__name" style="font-weight: bold;"><a href="'+ libruse_domain + res_link + '" target="_blank">'+ res_title + '</a></div>\
+<div class="bookAuthorProfile__name" style="margin-top: 0px;">'+res_author+'</div>\
+<div class="bookAuthorProfile__followerCount Text Text__body4 Text__subdued" style="margin-top: 0px; margin-bottom: 10px; color: '+access_color+' !important;">'+access+'</div>\
 </div>';
                         $(".libruse_results").append(div);
                     });
