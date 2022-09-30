@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.16
+// @version     1.17
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -236,12 +236,12 @@ function searchChitanka(title) {
             $(".changeSearchChitanka").attr("data-title", title).html(search_icon);
             $(".chitanka_results").html("");
             var resp = JSON.parse(response.responseText);
-            if (resp.result.nbResults == 0) {
+            if (resp.result?.nbResults == 0) {
                 $(".chitanka_results").append("Няма намерени произведения за <b>" + title + "</b>");
             }
 
             // Книги
-            $(resp.result.books).each(function (i,book) {
+            $(resp.result?.books).each(function (i,book) {
                 found_books.push(book.title + "|" + book.titleAuthor);
                 let div = '<div class="bookAuthorProfile__topContainer">\
         <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
@@ -260,7 +260,7 @@ function searchChitanka(title) {
             });
 
             // Текстове
-            $(resp.result.texts).each(function (i,text) {
+            $(resp.result?.texts).each(function (i,text) {
                 let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
     <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
         <a href="https://chitanka.info/text/'+ text.id + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px"></a>\
@@ -332,7 +332,6 @@ function searchLibruse(title) {
 
             } else if ($(doc).find("strong:contains('Вашето търсене върна')").length) {
                 let results = $(doc).find(".searchresults").find("table.table-striped").find("tbody").find("tr");
-                console.log(results);
                 if(results.length) {
                     $(results.slice(0,10)).each(function (i,result) {
                         let res_title = $(result).find("a.title").text();
