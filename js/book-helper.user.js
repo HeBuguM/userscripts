@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.14
+// @version     1.15
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -334,7 +334,7 @@ function searchLibruse(title) {
                 let results = $(doc).find(".searchresults").find("table.table-striped").find("tbody").find("tr");
                 console.log(results);
                 if(results.length) {
-                    $(results).each(function (i,result) {
+                    $(results.slice(0,10)).each(function (i,result) {
                         let res_title = $(result).find("a.title").text();
                         let res_author = $(result).find("a.author").text();
                         let res_link = $(result).find("a.title").attr("href");
