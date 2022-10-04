@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.17
+// @version     1.18
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -106,8 +106,8 @@ $(document).ready(function () {
         let div_chitanka = '<div class="ChitankaDiv clearFloats bigBox" style="width: 100%;">\
         <div class="h2Container gradientHeaderContainer">\
            <h2 class="brownBackground Text Text__title3" style="margin-bottom: 1.2rem">\
-                <a href="https://chitanka.info"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px;float: left;margin-right: 8px;"></a> Читанка\
-                <div class="changeSearchChitanka" data-title="'+ title + '" style="float: right;margin-right: 5%;margin-top: 2px; cursor: pointer"><img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg"></div>\
+                <a href="https://chitanka.info"><img src="https://hebugum.github.io/userscripts/assets/chitanka.png" style="width: 25px;float: left;margin-right: 8px;"></a> Читанка\
+                <div class="changeSearchChitanka" data-title="'+ title + '" style="float: right;margin-right: 5%;margin-top: 2px; cursor: pointer"><img src="https://hebugum.github.io/userscripts/assets/search.png"></div>\
            </h2>\
         </div>\
         <div class="bigBoxBody">\
@@ -159,8 +159,8 @@ $(document).ready(function () {
         let div_libruse = '<div class="LubruseDiv clearFloats bigBox" style="width: 100%;">\
         <div class="h2Container gradientHeaderContainer">\
            <h2 class="brownBackground Text Text__title3" style="margin-bottom: 1.2rem">\
-           <a href="https://www.libruse.bg/opac/"><img src="https://www.libruse.bg/images/sign.svg" style="width: 25px;float: left;margin-right: 8px;"></a> Библиотека \
-                <div class="changeSearchLibruse" data-title="'+ title + '" style="float: right;margin-right: 5%;margin-top: 2px; cursor: pointer"><img src="https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg"></div>\
+           <a href="https://www.libruse.bg/opac/"><img src="https://hebugum.github.io/userscripts/assets/libruse.png" style="width: 25px;float: left;margin-right: 8px;"></a> Библиотека \
+                <div class="changeSearchLibruse" data-title="'+ title + '" style="float: right;margin-right: 5%;margin-top: 2px; cursor: pointer"><img src="https://hebugum.github.io/userscripts/assets/search.png"></div>\
            </h2>\
         </div>\
         <div class="bigBoxBody">\
@@ -205,8 +205,8 @@ $(document).ready(function () {
             }
             if (author) {
                 let storygraph = '<div id ="storygraph" style="display: flex;justify-content: center;">\
-                   <a target="_blank" class="Button Button--secondary Button--small" href="https://app.thestorygraph.com/browse?search_term='+ encodeURIComponent(original_title + ' ' + author) + '" style="font-size: 15px;color: black;text-decoration: none;">\
-                       <img src="https://app.thestorygraph.com/icons/apple-icon-60x60.png" style="float: left;height: 26px;margin-top: -6px;">\
+                   <a target="_blank" class="Button Button--secondary Button--small" href="https://app.thestorygraph.com/browse?search_term='+ encodeURIComponent(original_title + ' ' + author) + '" style="font-size: 15px;text-decoration: none;">\
+                       <img src="https://hebugum.github.io/userscripts/assets/thestorygraph.png" style="float: left;height: 17px;margin-top: 1px;margin-right: 2px;">\
                        The StoryGraph</a>\
                 </div>';
                 if($("div#imagecol").length) {
