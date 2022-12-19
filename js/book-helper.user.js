@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.18
+// @version     1.19
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -39,6 +39,9 @@ $(document).ready(function () {
         var next_date = new Date('01 January ' + today.getFullYear());
         var next_date_day_number = (next_date.getDate() + (days_a_book * (current + 1)));
         next_date.setDate(next_date_day_number - 1);
+        if(today.getFullYear() < next_date.getFullYear()) {
+            next_date = new Date('31 December ' + today.getFullYear());
+        }
 
         var millisecondsPerDay = 1000 * 60 * 60 * 24;
         var millisBetween = today.getTime() - next_date.getTime();
