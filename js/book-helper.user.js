@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.19
+// @version     1.20
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -77,7 +77,7 @@ $(document).ready(function () {
             }
         }
         if (url.indexOf("?") < 0) {
-            $(this).attr("href", url + "?sort=title");
+            $(this).attr("href", url + "?sort=title&per_page=50");
         }
     });
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
         if(quotes_link.length) {
             let main_work = quotes_link.attr("href").match(/\/work\/quotes\/(\d{1,})/);
             if(main_work) {
-                let book_page_editions = '<center id="HeBuguM_leftColumn" style="margin-bottom: 10px"><a href="https://www.goodreads.com/work/editions/'+main_work[1]+'?sort=title" class="Button Button--secondary Button--small"><span class="Button__labelItem">All Editions</span></a></center>';
+                let book_page_editions = '<center id="HeBuguM_leftColumn" style="margin-bottom: 10px"><a href="https://www.goodreads.com/work/editions/'+main_work[1]+'?sort=title&per_page=50" class="Button Button--secondary Button--small"><span class="Button__labelItem">All Editions</span></a></center>';
                 $(".BookPage__leftColumn").find(".Sticky").append(book_page_editions);
             }
         }
