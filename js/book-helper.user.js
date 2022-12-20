@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.20
+// @version     1.21
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -199,6 +199,12 @@ $(document).ready(function () {
             let match = "\"originalTitle\"\:\"(.*)\"\,\"awardsWon\"";
             if($("#__NEXT_DATA__").text().match(match)[1]) {
                 original_title = $("#__NEXT_DATA__").text().match(match)[1];
+            }
+        }
+        if(!original_title) {
+            let match = "\"originalTitle\"\:\"(.*)\"\,\"awardsWon\"";
+            if($("h1[data-testid='bookTitle']").length) {
+                original_title = $("h1[data-testid='bookTitle']").text().trim();
             }
         }
         if (original_title) {
