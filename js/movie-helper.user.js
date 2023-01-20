@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HeBuguM's Movie Helper
 // @namespace    hebugum-movie-helper
-// @version      1.00
+// @version      1.10
 // @match        https://pro.imdb.com/title/*
 // @match        https://pro.imdb.com/name/*
 // @match        https://www.imdb.com/title/*
@@ -33,6 +33,16 @@ function replaceTitle(_, observer) {
     // Subtitles
     const reviewsElement = document.querySelector(`ul[data-testid="reviewContent-all-reviews"]`);
     if(reviewsElement) {
+        const torrentSearch = document.createElement("div")
+        torrentSearch.innerHTML = `
+        <h1 style="font-weight: bold; margin-top: 0.75rem">Download</h1>
+        <ul class="ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content baseAlt" role="presentation">
+		    <li class="ipc-inline-list__item"><a target="_blank" href="https://zamunda.net/bananas?&search=${title}" class="ipc-metadata-list-item__list-content-item--link torrent-search" style="color: var(--ipt-on-baseAlt-accent2-color);">zamunda</a></li>
+            <li class="ipc-inline-list__item"><a target="_blank" href="http://zelka.org/browse.php?search=${title}" class="ipc-metadata-list-item__list-content-item--link torrent-search" style="color: var(--ipt-on-baseAlt-accent2-color);">zelka</a></li>
+            <li class="ipc-inline-list__item"><a target="_blank" href="https://hd-torrents.org/torrents.php?active=1&options=0&search=${imdbId}" class="ipc-metadata-list-item__list-content-item--link torrent-search" style="color: var(--ipt-on-baseAlt-accent2-color);">hd-torrents</a></li>
+	    </ul>`;
+        reviewsElement.after(torrentSearch);
+
         const subtitleSearch = document.createElement("div")
         subtitleSearch.innerHTML = `
         <h1 style="font-weight: bold; margin-top: 0.75rem">Subtitles</h1>
@@ -41,6 +51,6 @@ function replaceTitle(_, observer) {
             <li class="ipc-inline-list__item"><a target="_blank" href="https://subsunacs.net/search.php?p=1&t=1&m=${title}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">subsunacs.net</a></li>
             <li class="ipc-inline-list__item"><a target="_blank" href="https://yavka.net/subtitles.php?s=${title}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">yavka.net</a></li>
 	    </ul>`;
-        reviewsElement.after(subtitleSearch)
+        reviewsElement.after(subtitleSearch);
     }
 }
