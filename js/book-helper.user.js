@@ -3,7 +3,7 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.21
+// @version     1.22
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -245,43 +245,49 @@ function searchChitanka(title) {
             $(".changeSearchChitanka").attr("data-title", title).html(search_icon);
             $(".chitanka_results").html("");
             var resp = JSON.parse(response.responseText);
+            console.log(resp);
             if (resp.result?.nbResults == 0) {
                 $(".chitanka_results").append("Няма намерени произведения за <b>" + title + "</b>");
             }
 
             // Книги
-            $(resp.result?.books).each(function (i,book) {
-                found_books.push(book.title + "|" + book.titleAuthor);
-                let div = '<div class="bookAuthorProfile__topContainer">\
-        <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
-            <img src="https://chitanka.info/'+ book.cover + '" style="width: 55px; height: 80px">\
-        </div>\
-        <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
-        <div class="bookAuthorProfile__name Text" style="font-weight: bold;"><a href="https://chitanka.info/book/'+ book.id + '" target="_blank">' + book.title + '</a></div>\
-        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">'+ book.titleAuthor + '</div>\
-        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">Превод: '+ book.translators[0]?.name + '</div>\
-        <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">\
-        <a href="https://chitanka.info/book/'+ book.id + '.epub" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/epub.png" style="width: 24px; display: inline-block;"></a>\
-        <a href="https://chitanka.info/book/'+ book.id + '.mobi" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/amazon.png" style="width: 24px; display: inline-block;"></a>\
-    </div>\
+
+           if(resp.result?.books.length) {
+               $(resp.result.books.slice(0,8)).each(function (i,book) {
+                   found_books.push(book.title + "|" + book.titleAuthor);
+                   let div = '<div class="bookAuthorProfile__topContainer">\
+<div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
+<img src="https://chitanka.info/'+ book.cover + '" style="width: 55px; height: 80px">\
+</div>\
+<div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
+<div class="bookAuthorProfile__name Text" style="font-weight: bold;"><a href="https://chitanka.info/book/'+ book.id + '" target="_blank">' + book.title + '</a></div>\
+<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">'+ (book.titleAuthor ?  book.titleAuthor : "") + '</div>\
+<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">'+ (book.translators[0]?.name ? 'Превод: ' + book.translators[0]?.name : "") + '</div>\
+<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued">\
+<a href="https://chitanka.info/book/'+ book.id + '.epub" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/epub.png" style="width: 24px; display: inline-block;"></a>\
+<a href="https://chitanka.info/book/'+ book.id + '.mobi" target="_blank"><img src="https://hebugum.github.io/userscripts/assets/amazon.png" style="width: 24px; display: inline-block;"></a>\
+</div>\
 </div>';
-                $(".chitanka_results").append(div);
-            });
+                   $(".chitanka_results").append(div);
+               });
+            }
 
             // Текстове
-            $(resp.result?.texts).each(function (i,text) {
-                let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
-    <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
-        <a href="https://chitanka.info/text/'+ text.id + '" target="_blank" style="float: left; margin-top: 1px;"><img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px"></a>\
-    </div>\
-    <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
-    <div class="bookAuthorProfile__name" style="font-weight: bold;">'+ text.title + '</div>\
-    <div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued" style="margin-top: 0px;">'+ text.authors[0]?.name + '</div>\
+            if(resp.result?.texts.length) {
+                $(resp.result.texts.slice(0,5)).each(function (i,text) {
+                    let div = '<div class="bookAuthorProfile__topContainer" style="margin-bottom: 3px;">\
+<div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar Text" style="display: inline-block;margin-right: 5px">\
+<img src="https://forum.chitanka.info/styles/promylib/imageset/site_logo.png" style="width: 25px">\
+</div>\
+<div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
+<div class="bookAuthorProfile__name" style="font-weight: bold;"><a href="https://chitanka.info/text/'+ text.id + '" target="_blank" style="margin-top: 1px;">'+ text.title + '</a></div>\
+<div class="bookAuthorProfile__followerCount Text Text__body3 Text__subdued" style="margin-top: 0px;">'+ (text.authors[0]?.name ? text.authors[0]?.name : "") + '</div>\
 </div>';
-                if (found_books.indexOf(text.title + "|" + text.authors[0]?.name) < 0) {
-                    $(".chitanka_results").append(div);
-                }
-            });
+                    if (found_books.indexOf(text.title + "|" + text.authors[0]?.name) < 0) {
+                        $(".chitanka_results").append(div);
+                    }
+                });
+            }
         }
     });
 }
