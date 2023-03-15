@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HeBuguM's Movie Helper
 // @namespace    hebugum-movie-helper
-// @version      1.12
+// @version      1.13
 // @match        https://pro.imdb.com/title/*
 // @match        https://pro.imdb.com/name/*
 // @match        https://www.imdb.com/title/*
@@ -19,6 +19,9 @@
 
 // RARBG & Subtitles Search
 const titleElement = document.querySelector('body h1[data-testid="hero-title-block__title"]');
+if(!titleElement) {
+    const titleElement = document.querySelector('body h1[data-testid="hero__pageTitle"]');
+}
 replaceTitle();
 new MutationObserver(replaceTitle).observe(titleElement,{childList: true});
 
