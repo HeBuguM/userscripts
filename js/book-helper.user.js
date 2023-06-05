@@ -3,14 +3,14 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.22
+// @version     1.23
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @downloadURL https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @updateURL   https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @connect     chitanka.info
-// @connect     185.138.176.146
+// @connect     185.138.176.188
 // @noframes
 // ==/UserScript==
 
@@ -18,7 +18,7 @@
 
 var spinner_icon = '<img src="https://hebugum.github.io/userscripts/assets/loading.gif" style="height: 19px">';
 var search_icon = '<img src="https://hebugum.github.io/userscripts/assets/search.png" style="height: 19px">';
-var libruse_domain = 'http://185.138.176.146:18082'
+var libruse_domain = 'http://185.138.176.188:85'
 
 var path = window.location.pathname;
 
@@ -307,16 +307,16 @@ function searchLibruse(title) {
             var doc = document.createElement('div');
             doc.innerHTML = response.responseText;
 
-            if ($(doc).find("strong:contains('Не са открити резултати!')").length) {
+            if ($(doc).find("h1:contains('Не са открити резултати!')").length) {
                 $(".libruse_results").html("Не са открити резултати!");
-            } else if ($(doc).find("h5:contains('Нямате читателска карта')").length) {
-                $(".libruse_results").html("<a href='https://www.libruse.bg/opac/' target='_blank'>Вход</a>");
+            } else if ($(doc).find("h3:contains('Нямате читателска карта')").length) {
+                $(".libruse_results").html("<a href='https://www.libruse.bg/opac/' target='_blank'>Изтекла сесия! Влезте в читателския си акаунт 🔗</a>");
             } else if ($(doc).find("h1.title").length) {
                 let libUrl = response.finalUrl;
                 let libTitle = $(doc).find("h1.title").text();
                 let libCover = '';
-                if ($(doc).find("a.localimage").find("img").attr("src")) {
-                    libCover = libruse_domain + $(doc).find("a.localimage").find("img").attr("src");
+                if ($(doc).find("div.local-coverimg").find("img").attr("src")) {
+                    libCover = libruse_domain + $(doc).find("div.local-coverimg").find("img").attr("src");
                 }
 
                 let holdings = [];
@@ -345,14 +345,14 @@ function searchLibruse(title) {
 </div>';
                 $(".libruse_results").append(div);
 
-            } else if ($(doc).find("strong:contains('Вашето търсене върна')").length) {
+            } else if ($(doc).find("h1:contains('Търсенето Ви върна')").length) {
                 let results = $(doc).find(".searchresults").find("table.table-striped").find("tbody").find("tr");
                 if(results.length) {
                     $(results.slice(0,10)).each(function (i,result) {
                         let res_title = $(result).find("a.title").text();
                         let res_author = $(result).find("a.author").text();
                         let res_link = $(result).find("a.title").attr("href");
-                        let access = $(result).find("span.label:contains('Достъпност')").closest('span.results_summary').text();
+                        let access = $(result).find("span.label:contains('На разположение')").closest('span.results_summary').text();
                         let access_color = 'gray';
                         if(access) {
                             access = access.replace('Достъпност','').replace('Няма свободни артикули:','Няма свободни артикули');
