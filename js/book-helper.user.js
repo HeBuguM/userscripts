@@ -3,14 +3,14 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.23
+// @version     1.24
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @downloadURL https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @updateURL   https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @connect     chitanka.info
-// @connect     185.138.176.188
+// @connect     185.138.176.146
 // @noframes
 // ==/UserScript==
 
@@ -18,7 +18,7 @@
 
 var spinner_icon = '<img src="https://hebugum.github.io/userscripts/assets/loading.gif" style="height: 19px">';
 var search_icon = '<img src="https://hebugum.github.io/userscripts/assets/search.png" style="height: 19px">';
-var libruse_domain = 'http://185.138.176.188:85'
+var libruse_domain = 'http://185.138.176.146:18082'
 
 var path = window.location.pathname;
 
@@ -309,8 +309,6 @@ function searchLibruse(title) {
 
             if ($(doc).find("h1:contains('Не са открити резултати!')").length) {
                 $(".libruse_results").html("Не са открити резултати!");
-            } else if ($(doc).find("h3:contains('Нямате читателска карта')").length) {
-                $(".libruse_results").html("<a href='https://www.libruse.bg/opac/' target='_blank'>Изтекла сесия! Влезте в читателския си акаунт 🔗</a>");
             } else if ($(doc).find("h1.title").length) {
                 let libUrl = response.finalUrl;
                 let libTitle = $(doc).find("h1.title").text();
@@ -322,12 +320,12 @@ function searchLibruse(title) {
                 let holdings = [];
                 $(doc).find("table#holdingst").find("tbody").find("tr").each(function (row) {
                     let color = "blue";
-                    let status = $(this).find("td.status").text().split("(")[0].trim() + ' ' + $(this).find("td.date_due").text().trim();
-                    if (status.indexOf("Достъпен") >= 0) {
-                        status = 'Свободна'
+                    let status = $(this).find("td.status").text().split("(")[0].trim().replace("Заети","Заета") + ' ' + $(this).find("td.date_due").text().trim();
+                    if (status.indexOf("На разположение") >= 0) {
+                        status = 'На разположение'
                         color = 'green';
                     } else if (status.indexOf("читалня") >= 0) {
-                        status = 'Хранилище'
+                        status = 'Само за читалня'
                         color = 'red';
                     }
                     holdings.push('<li class="Text Text__body3" style="color: ' + color + '">' + status + '</li>');
@@ -335,7 +333,7 @@ function searchLibruse(title) {
 
                 let div = '<div class="bookAuthorProfile__topContainer">\
     <div class="bookAuthorProfile__photoContainer FeaturedPerson__avatar" style="display: inline-block;margin-right: 5px">\
-        <img src="'+ libCover + '" style="width: 55px; height: 80px">\
+        <img src="'+ libCover + '" style="width: 55px; height: 80px" alt=" ">\
     </div>\
     <div class="bookAuthorProfile__widgetContainer" style="display: inline-block;vertical-align: top; width: calc(100% - 66px)">\
         <div class="bookAuthorProfile__name Text" style="font-weight: bold;"><a href="'+ libUrl + '" target="_blank">' + libTitle + '</a>\
@@ -377,6 +375,8 @@ function searchLibruse(title) {
                     });
                 }
                 $(".libruse_results").append("<div><a href='" + url + "' target='_blank'>" + $(doc).find("strong:contains('Вашето търсене върна')").text() + "</a></div>");
+            } else if ($(doc).find("h3:contains('Може да ползвате потребителско име и парола за временен достъп')").length) {
+                $(".libruse_results").html("<a href='https://www.libruse.bg/opac/' target='_blank'>Изтекла сесия! Влезте в читателския си акаунт 🔗</a>");
             } else {
                 $(".libruse_results").html("<a href='" + url + "' target='_blank'>Виж резултата от търсенето</a>");
             }
