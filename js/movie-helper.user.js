@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HeBuguM's Movie Helper
 // @namespace    hebugum-movie-helper
-// @version      1.15
+// @version      1.16
 // @match        https://pro.imdb.com/title/*
 // @match        https://pro.imdb.com/name/*
 // @match        https://www.imdb.com/title/*
@@ -31,6 +31,7 @@ function replaceTitle(_, observer) {
     // Title URL
     titleElement.innerHTML = `${title} <a href="https://1337x.to/search/${encodeURIComponent(title)}/1/" title="1337x Search" target="_blank" style="color: white;text-decoration: none;">↗</a>`;
 
+    
     const reviewsElement = document.querySelector(`ul[data-testid="reviewContent-all-reviews"]`);
     if(reviewsElement) {
         // Torrents
@@ -53,7 +54,7 @@ function replaceTitle(_, observer) {
         <ul class="ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content baseAlt" role="presentation">
 		    <li class="ipc-inline-list__item"><a target="_blank" href="http://subs.sab.bz/index.php?act=search&movie=${encodeURIComponent(title)}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">subs.sab.bz</a></li>
             <li class="ipc-inline-list__item"><a target="_blank" href="https://subsunacs.net/search.php?p=1&t=1&m=${encodeURIComponent(title)}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">subsunacs</a></li>
-            <li class="ipc-inline-list__item"><a target="_blank" href="https://yavka.net/subtitles.php?s=${encodeURIComponent(title)}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">YavkA</a></li>
+            <li class="ipc-inline-list__item"><a target="_blank" href="https://yavka.net/imdb/${imdbId}" class="ipc-metadata-list-item__list-content-item--link" style="color: var(--ipt-on-baseAlt-accent2-color);">YavkA</a></li>
 	    </ul>`;
         reviewsElement.after(subtitleSearch);
     }
