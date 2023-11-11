@@ -3,14 +3,14 @@
 // @namespace   hebugum-books-helper
 // @include     https://*goodreads.com/*
 // @include     https://*thestorygraph.com/*
-// @version     1.24
+// @version     1.25
 // @grant       GM_getResourceURL
 // @grant       GM_xmlhttpRequest
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @downloadURL https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @updateURL   https://hebugum.github.io/userscripts/js/book-helper.user.js
 // @connect     chitanka.info
-// @connect     185.138.176.146
+// @connect     185.138.176.188
 // @noframes
 // ==/UserScript==
 
@@ -18,7 +18,7 @@
 
 var spinner_icon = '<img src="https://hebugum.github.io/userscripts/assets/loading.gif" style="height: 19px">';
 var search_icon = '<img src="https://hebugum.github.io/userscripts/assets/search.png" style="height: 19px">';
-var libruse_domain = 'http://185.138.176.146:18082'
+var libruse_domain = 'http://185.138.176.188:88/'
 
 var path = window.location.pathname;
 
