@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         HeBuguM Chess
 // @namespace    hebugum-chess
-// @version      2025-05-03
+// @version      2025-05-17
 // @match        https://www.chess.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=chess.com
 // @grant        GM_getResourceURL
 // @grant        GM_xmlhttpRequest
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @downloadURL  https://hebugum.github.io/userscripts/js/chess.user.js
-// @updateURL    https://hebugum.github.io/userscripts/js/chess.user.js
+// @downloadURL https://hebugum.github.io/userscripts/js/chess.user.js
+// @updateURL   https://hebugum.github.io/userscripts/js/chess.user.js
 // @run-at       document-end
 // @nofremes
 // ==/UserScript==
@@ -16,7 +16,7 @@
 const new_game_panel_style = `
 <style>
     .qp-pannel {
-        width: 120px;
+        width: 138px;
         position: fixed;
         right: 20px;
         top: calc(50% - 30px);
@@ -56,6 +56,10 @@ const new_game_panel = `
     <div class="qp-header">
         <span class="icon-font-chess chess" style="width: 100%"></span>
     </div>
+    <a class="qp-action"
+        href="/puzzles/rush">
+        <span class="icon-font-chess puzzle-rush" style="width: 40px; font-size: 1.2em"></span> Puzzle Rush
+    </a>
     <a class="qp-action"
         href="/play/online/new?action=createLiveChallenge&base=180&timeIncrement=2">
         <span class="icon-font-chess blitz" style="width: 40px; font-size: 1.2em"></span> 3 | 2
